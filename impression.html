@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Impression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="sub-page">
+  <a href="index.html" class="back-btn" data-transition>← back</a>
+
+  <main class="page">
+    <header class="page-head">
+      <img src="impession.png" alt="" class="page-icon">
+      <h1 class="page-title">My Impression</h1>
+      <p class="page-sub">ความประทับใจของเรา ♡</p>
+    </header>
+
+    <section class="impression-layout">
+  <article class="paper" id="impressionText">
+    <span class="tape tape-left"></span>
+
+    <!-- แถบโฟโต้บูท แปะอยู่บนกระดาษ -->
+    <div class="strip-area">
+      <span class="sticker s1">♡</span>
+      <span class="sticker s2">✦</span>
+      <span class="sticker s3">✿</span>
+      <span class="sticker s4">✧</span>
+      <div class="photostrip">
+        <span class="tape"></span>
+        <!-- 📷 ใส่ลิงก์รูปใน src="" -->
+        <div class="photo" data-label="photo 1"><img src="pic1.jpg" alt="photo 1"></div>
+        <div class="photo" data-label="photo 2"><img src="pic2.jpg" alt="photo 2"></div>
+        <div class="photo" data-label="photo 3"><img src="pic3.jpg" alt="photo 3"></div>
+        <div class="photo" data-label="photo 4"><img src="pic4.jpg" alt="photo 4"></div>
+        <p class="strip-foot">09 . 10 . 2026 ♡</p>
+      </div>
+    </div>
+
+    <h2 class="paper-title fx">ความประทับใจ…</h2>
+    <!-- ✏️ ใส่ข้อความตรงนี้ -->
+    <p class="fx">เธอทำให้เค้าประหลาดใจหลายเรื่องเลยนะ ตั้งแต่เป็นเพื่อนกันจนมาคบกันอะไม่เคยนึกเลยนะว่าเธอจะเป็นแบบนี้</p>
+    <p class="fx">ตอนคบกันใหม่ๆยอมรับเลยว่าไม่ชิน จากคนที่เคยคิดว่าเป็นไม่ได้แน่ๆกลายเป็นคนที่บอกรักทุกๆคืนน่ะ แต่เค้าไม่ผิดหวังเลยนะที่มี<br>หมิงหมิงเป็นแฟนอะ เดิมทีหมิงหมิงก็เป็นคนสนิทที่สำคัญมากๆอยู่แล้วด้วยแหละ</p>
+    <p class="fx">แล้วก็ขอบคุณนะคับที่ดูแลดีมากๆแบบนี้ เค้าอาจจะเอาแต่ใจขี้น้อยใจ อาจจะน่ารำคาญแหละขอโทษนะ แต่ขอบคุณจริงๆนะที่ทนกันได้เค้ามีความสุขเสมอเมื่อมีเธอนะ แฟนอย่าคิดมากเลยน้าา ไม่ว่าจะเรื่องอะไรเราต้องหาทางออกไปด้วยกันได้แน่ๆคับ เค้ารักเธอนะคับไอแก้มตุ้ย</p>
+    <p class="fx sign">— จากตัวโน๊ต ♡</p>
+  </article>
+</section>
+
+    <nav class="page-nav">
+      <a href="index.html" data-transition>← หน้าแรก</a>
+      <a href="concern.html" data-transition>My Concern →</a>
+    </nav>
+    <footer class="page-foot">made with love ♡</footer>
+  </main>
+
+  <script src="common.js"></script>
+  <script>
+    const box = document.getElementById('impressionText');
+    let t = 0;
+    box.querySelectorAll('.fx').forEach(el => { t = FX.blurWords(el, 55, t) + 150; });
+    FX.onView(box, () => box.classList.add('play'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>1m w/ U</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="home">
+  <div class="big-box">
+
+    <!-- ===== ส่วนบน: นาฬิกา + For U + โปสการ์ด ===== -->
+    <section class="hero">
+      <div class="timer-box">
+        <div class="timer">
+          <h3 id="timer-label">We've been together for</h3>
+          <div id="timer" class="time-grid">
+            <div class="time-unit"><span class="num" id="t-days">0</span><span class="lbl">Days</span></div>
+            <div class="time-unit"><span class="num" id="t-hours">00</span><span class="lbl">Hours</span></div>
+            <div class="time-unit"><span class="num" id="t-mins">00</span><span class="lbl">Mins</span></div>
+            <div class="time-unit"><span class="num" id="t-secs">00</span><span class="lbl">Secs</span></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="for-u">For U</h2>
+
+      <div class="psc" id="psc">
+        <!-- โปสการ์ดหน้าแรก -->
+        <img src="for Khunanan.png" alt="Card" id="postcard" class="cover-img">
+
+        <!-- เมนู 3 อันที่เด้งขึ้นมาแทน (ซ้าย → ขวา) -->
+        <div class="card-group" id="popup-box">
+            <a class="menu-box" href="impression.html">
+            <h2>My Impression</h2>
+            <img src="impession.png" class="menu-item" alt="Impression">
+            </a>
+            <a class="menu-box" href="concern.html">
+            <h2>My Concern</h2>
+            <img src="sad.png" class="menu-item" alt="Concern">
+            </a>
+            <a class="menu-box" href="flower.html">
+            <h2>My Flower</h2>
+            <img src="flower.png" class="menu-item" alt="Flower">
+            </a>
+        </div>
+      <p class="tap-hint" id="tap-hint">แตะที่โปสการ์ดได้เลย ♡</p>
+      <a href="#note" class="scroll-hint">scroll<span>↓</span></a>
+    </section>
+
+    <!-- ===== ส่วนล่าง: โน้ตสั้นๆ (ทำให้หน้าเว็บมีความยาวให้เลื่อน) ===== -->
+    <section class="note-section" id="note">
+      <div class="note-card">
+        <span class="tape"></span>
+        <h3>note ♡</h3>
+        <!-- ✏️ ใส่ข้อความสั้นๆ ตรงนี้ -->
+        <p>รักหมิงหมิงนะ <br>อาจจะเลี่ยนไปหน่อยแต่ถ้าเธอจำวันครบรอบไม่ได้เค้าจะเป็นคนจำเองนะ</p>
+        <p class="note-date">since 09 . 10 . 2026</p>
+      </div>
+    </section>
+
+    <footer class="site-foot">made with love, only for u ♡</footer>
+  </div>
+
+  <script src="common.js"></script>
+  <script>
+    /* ---------- 1. กดโปสการ์ด → ฟลิบแล้วหายไป → เมนู 3 อันเด้งขึ้นมา ---------- */
+    const cover = document.getElementById('postcard');
+    const popup = document.getElementById('popup-box');
+    const psc   = document.getElementById('psc');
+    const hint  = document.getElementById('tap-hint');
+
+    const pages = {
+      impression: 'impression.html',
+      concern:    'concern.html',
+      flower:     'flower.html'
+    };
+    function openPage(name) { FX.goTo(pages[name]); }
+
+    // รองรับกด Enter บนคีย์บอร์ด
+    document.querySelectorAll('.menu-item').forEach(el => {
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+      });
+    });
+
+    function showMenu() {
+      cover.style.display = 'none';
+      popup.classList.add('show');
+      hint.textContent = 'เลือกเปิดอันไหนก่อนก็ได้นะ ♡';
+      sessionStorage.setItem('postcardOpened', '1'); // กด back กลับมาจะเห็นเมนูเลย
+    }
+
+    function burst() {
+      const cx = psc.clientWidth / 2, cy = psc.clientHeight / 2, n = 14;
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement('span');
+        s.className = 'burst';
+        s.textContent = i % 2 ? '♡' : '✦';
+        const a = (Math.PI * 2 * i) / n, d = 80 + Math.random() * 70;
+        s.style.left = cx + 'px';
+        s.style.top  = cy + 'px';
+        s.style.setProperty('--dx', Math.cos(a) * d + 'px');
+        s.style.setProperty('--dy', Math.sin(a) * d + 'px');
+        psc.appendChild(s);
+        setTimeout(() => s.remove(), 1000);
+      }
+    }
+
+    if (sessionStorage.getItem('postcardOpened') === '1') showMenu();
+
+    cover.addEventListener('click', () => {
+      if (cover.classList.contains('flip')) return;
+      cover.classList.add('flip');
+      setTimeout(burst, 450);
+      setTimeout(showMenu, 900);
+    });
+
+    /* ---------- 2. นาฬิกานับเวลาตั้งแต่ 9 ต.ค. 2026 เวลา 20:20 น. ---------- */
+    // เดือนใน JS เริ่มนับจาก 0 → 9 = ตุลาคม
+    const startTime = new Date(2026, 9, 9, 20, 20, 0).getTime();
+    const label = document.getElementById('timer-label');
+    const tD = document.getElementById('t-days');
+    const tH = document.getElementById('t-hours');
+    const tM = document.getElementById('t-mins');
+    const tS = document.getElementById('t-secs');
+    const pad = n => String(n).padStart(2, '0');
+
+    function updateCountUp() {
+      let diff = Date.now() - startTime;
+      if (diff < 0) {               // ถ้ายังไม่ถึงวันนั้น จะนับถอยหลังให้แทน
+        label.textContent = 'Counting down to our day ♡';
+        diff = -diff;
+      } else {
+        label.textContent = "We've been together for";
+      }
+      tD.textContent = Math.floor(diff / 86400000);
+      tH.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+      tM.textContent = pad(Math.floor((diff % 3600000) / 60000));
+      tS.textContent = pad(Math.floor((diff % 60000) / 1000));
+    }
+    updateCountUp();
+    setInterval(updateCountUp, 1000);
+  </script>
+</body>
+</html>

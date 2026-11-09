@@ -1,0 +1,718 @@
+/* =========================================================
+   style.css — ใช้ร่วมกันทุกหน้า
+   ธีม: ม่วง-ชมพูพาสเทล สดใส ไม่อึมครึม
+   ========================================================= */
+:root {
+  --bg-1: #d9cbfa;
+  --bg-2: #efc9f1;
+  --bg-3: #ffdcef;
+  --ink: #7a59a8;
+  --ink-soft: #a58ccc;
+  --accent: #d974b0;
+  --pink: #ff9fcf;
+  --pink-soft: #ffe1f0;
+  --lilac-soft: #f3ecff;
+  --paper: #fffafd;
+  --line: rgba(255, 255, 255, .65);
+  --shadow: 0 12px 32px rgba(150, 105, 200, .2);
+  --hand: 'Mali', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/* ---------- เลื่อนได้ แต่ซ่อนแถบ scroll ---------- */
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Edge เก่า */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar { display: none; width: 0; height: 0; } /* Chrome / Safari */
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  font-family: 'Prompt', sans-serif;
+  color: var(--ink);
+  background: var(--bg-2);
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  animation: pageIn .6s ease backwards;
+  transition: opacity .35s ease;
+}
+/* พื้นหลังไล่สีแบบ fixed (ใช้ได้บน iPhone ด้วย) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,255,255,.6), transparent 38%),
+    radial-gradient(circle at 88% 85%, rgba(255,255,255,.45), transparent 42%),
+    linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+}
+body.page-leave { opacity: 0; }
+@keyframes pageIn { from { opacity: 0; } }
+
+img { max-width: 100%; }
+
+/* ---------- ของลอยๆ บนพื้นหลัง ---------- */
+.deco-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.deco {
+  position: absolute;
+  bottom: -40px;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 0 10px rgba(255,255,255,.7);
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0); opacity: 0; }
+  10%  { opacity: .9; }
+  90%  { opacity: .6; }
+  100% { transform: translateY(-115vh) rotate(45deg); opacity: 0; }
+}
+
+/* =========================================================
+   INDEX
+   ========================================================= */
+.big-box {
+  width: 100%;
+  max-width: 980px;
+  margin-inline: auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(28px + env(safe-area-inset-top)) 0 80px;
+}
+
+.timer-box {
+  width: min(100%, 520px);
+  background: rgba(255,255,255,.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 16px clamp(12px, 4vw, 28px);
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 18px;
+}
+.timer h3 {
+  font-size: clamp(.85rem, 2.4vw, 1rem);
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 6px rgba(150,100,200,.35);
+}
+.time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(6px, 2vw, 12px); }
+.time-unit {
+  background: rgba(255,255,255,.65);
+  border-radius: 16px;
+  padding: 10px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.time-unit .num {
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  font-weight: 600;
+  color: #9466c9;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.time-unit .lbl { font-size: clamp(.62rem, 1.8vw, .78rem); color: var(--ink-soft); margin-top: 2px; }
+
+.for-u {
+  font-family: var(--hand);
+  font-size: clamp(2.6rem, 10vw, 4.4rem);
+  color: #fff;
+  margin: 4px 0;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 18px rgba(170,100,200,.45);
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  50% { text-shadow: 0 4px 26px rgba(255,160,215,.9); }
+}
+
+/* กล่องโปสการ์ด/เมนู ล็อกความสูงไว้ จอจะไม่เด้ง */
+.psc {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  height: clamp(270px, 62vw, 400px);
+  margin: 2vh auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+}
+.cover-img {
+  position: absolute;
+  width: min(300px, 78vw);
+  max-height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  filter: drop-shadow(0 14px 22px rgba(140,90,180,.3));
+  animation: bob 3.2s ease-in-out infinite;
+}
+.cover-img.flip {
+  pointer-events: none;
+  animation: flipAway .9s cubic-bezier(.45,.05,.55,.95) forwards;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(-10px) rotate(1.5deg); }
+}
+@keyframes flipAway {
+  0%   { transform: rotateY(0) scale(1); opacity: 1; }
+  50%  { transform: rotateY(180deg) scale(1.08); opacity: 1; }
+  100% { transform: rotateY(360deg) scale(.3) translateY(-30px); opacity: 0; }
+}
+
+.card-group {
+  position: absolute;
+  inset: 0;
+  display: none;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: clamp(6px, 3vw, 28px);
+  padding: 0 6px;
+}
+.card-group.show { display: flex; }
+.menu-box {
+  flex: 0 1 30%;
+  max-width: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  animation: popIn .6s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.menu-box:nth-child(2) { animation-delay: .15s; }
+.menu-box:nth-child(3) { animation-delay: .3s; }
+.menu-box h2 {
+  font-size: clamp(.7rem, 2.6vw, 1rem);
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  text-shadow: 0 1px 6px rgba(150,100,200,.4);
+}
+.menu-box img.menu-item {
+  width: 100%;
+  max-width: clamp(72px, 20vw, 130px);
+  height: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 8px 14px rgba(140,90,180,.3));
+  transition: transform .25s ease;
+}
+.menu-box img.menu-item:active { transform: scale(.94); }
+@media (hover: hover) {
+  .menu-box img.menu-item:hover { transform: translateY(-6px) rotate(-3deg); }
+}
+@keyframes popIn {
+  0%   { opacity: 0; transform: translateY(24px) scale(.7); }
+  100% { opacity: 1; transform: none; }
+}
+
+.burst {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  color: #fff;
+  font-size: 1.2rem;
+  text-shadow: 0 0 8px rgba(255,170,220,.9);
+  animation: burst .9s ease-out forwards;
+}
+@keyframes burst {
+  from { transform: translate(-50%,-50%) scale(.4); opacity: 1; }
+  to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.2); opacity: 0; }
+}
+
+.tap-hint {
+  margin-top: 14px;
+  color: #fff;
+  font-size: .9rem;
+  text-align: center;
+  text-shadow: 0 1px 6px rgba(150,100,200,.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: .55; } }
+
+.scroll-hint {
+  position: absolute;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: .75rem;
+  letter-spacing: 3px;
+  opacity: .9;
+}
+.scroll-hint span { font-size: 1.1rem; animation: bounce 1.6s ease-in-out infinite; }
+@keyframes bounce { 50% { transform: translateY(6px); } }
+
+.note-section {
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0 20px;
+}
+.note-card {
+  position: relative;
+  width: min(100%, 560px);
+  background: rgba(255,255,255,.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: clamp(28px, 6vw, 44px) clamp(20px, 5vw, 40px);
+  box-shadow: var(--shadow);
+  text-align: center;
+  line-height: 1.8;
+}
+.note-card h3 { font-family: var(--hand); font-size: clamp(1.4rem, 4.5vw, 1.8rem); color: var(--accent); margin-bottom: 10px; }
+.note-date { margin-top: 14px; font-size: .85rem; color: var(--ink-soft); letter-spacing: 2px; }
+.site-foot {
+  padding: 30px 0 calc(34px + env(safe-area-inset-bottom));
+  color: #fff;
+  font-size: .85rem;
+  text-align: center;
+  text-shadow: 0 1px 6px rgba(150,100,200,.4);
+}
+
+/* =========================================================
+   หน้าย่อย (ใช้ร่วมกัน)
+   ========================================================= */
+.back-btn {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  z-index: 50;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: .9rem;
+  box-shadow: 0 6px 16px rgba(150,105,200,.2);
+  transition: transform .2s;
+}
+.back-btn:active { transform: scale(.95); }
+
+.page {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px) calc(30px + env(safe-area-inset-bottom));
+}
+.page-head { position: relative; text-align: center; margin: 72px 0 32px; }
+.page-icon {
+  width: clamp(64px, 16vw, 92px);
+  height: auto;
+  filter: drop-shadow(0 8px 14px rgba(140,90,180,.3));
+  animation: bob 3.5s ease-in-out infinite;
+}
+.page-title {
+  font-family: var(--hand);
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  color: #fff;
+  text-shadow: 0 4px 16px rgba(170,100,200,.45);
+}
+.page-sub { color: #fff; opacity: .95; margin-top: 4px; font-size: clamp(.9rem, 2.5vw, 1rem); }
+
+.paper {
+  position: relative;
+  background: var(--paper);
+  border-radius: 22px;
+  padding: clamp(26px, 5vw, 44px) clamp(20px, 5vw, 44px);
+  box-shadow: var(--shadow);
+  line-height: 1.9;
+  font-size: clamp(.98rem, 2.6vw, 1.08rem);
+  color: #6e5394;
+}
+.paper p { margin-bottom: 1em; }
+.paper-title { font-family: var(--hand); font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--accent); margin-bottom: 12px; }
+.paper .sign { text-align: right; font-family: var(--hand); color: var(--ink-soft); }
+
+.tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 96px;
+  height: 26px;
+  border-radius: 3px;
+  background: rgba(255,190,225,.75);
+  transform: translateX(-50%) rotate(-3deg);
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+.tape-left  { left: 22px; transform: rotate(-8deg); }
+.tape-right { left: auto; right: 22px; transform: rotate(7deg); background: rgba(205,185,250,.75); }
+
+/* ช่องรูป */
+.photo {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lilac-soft);
+}
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo.empty { background: repeating-linear-gradient(45deg, #f6efff 0 10px, #ffeef7 10px 20px); }
+.photo.empty img { display: none; }
+.photo.empty::after {
+  content: "+ " attr(data-label);
+  padding: 8px;
+  font-size: .8rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.couple { display: flex; justify-content: center; margin: 48px 0 10px; }
+.polaroid {
+  position: relative;
+  width: min(320px, 80vw);
+  background: #fff;
+  padding: 12px 12px 0;
+  box-shadow: var(--shadow);
+  transform: rotate(-3deg);
+}
+.polaroid .photo { aspect-ratio: 1; }
+.polaroid figcaption { font-family: var(--hand); text-align: center; padding: 12px 0 16px; color: var(--ink-soft); font-size: 1.1rem; }
+
+.page-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 44px; }
+.page-nav a {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.65);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: .9rem;
+  box-shadow: 0 6px 16px rgba(150,105,200,.15);
+  transition: transform .2s;
+}
+@media (hover: hover) { .page-nav a:hover { transform: translateY(-3px); } }
+.page-foot { text-align: center; color: #fff; font-size: .85rem; padding: 30px 0 10px; text-shadow: 0 1px 6px rgba(150,100,200,.4); }
+
+/* =========================================================
+   หน้า 1 — Impression
+   ========================================================= */
+.impression-layout { display: grid; gap: 44px; align-items: start; }
+@media (min-width: 768px) {
+  .impression-layout { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+}
+.strip-area { position: relative; display: flex; justify-content: center; padding: 20px 0; }
+.photostrip {
+  position: relative;
+  width: min(210px, 62vw);
+  background: #fff;
+  padding: 12px 12px 0;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  transform: rotate(3deg);
+}
+.photostrip .photo { aspect-ratio: 4 / 3; margin-bottom: 10px; border-radius: 2px; }
+.strip-foot { font-family: var(--hand); text-align: center; color: var(--ink-soft); padding: 4px 0 14px; font-size: .9rem; }
+
+.sticker {
+  position: absolute;
+  z-index: 2;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--pink);
+  text-shadow: 0 2px 8px rgba(255,255,255,.9);
+  pointer-events: none;
+  user-select: none;
+  animation: wobble 3s ease-in-out infinite;
+}
+.s1 { top: 0;     left: 10%; }
+.s2 { top: 30%;   right: 6%; color: #b79bf0; animation-delay: .5s; }
+.s3 { bottom: 8%; left: 8%;  animation-delay: 1s; }
+.s4 { bottom: 0;  right: 14%; color: #b79bf0; animation-delay: 1.5s; }
+@keyframes wobble { 50% { transform: translateY(-6px) rotate(12deg) scale(1.1); } }
+
+/* เอฟเฟกต์ A */
+.fx-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(10px);
+  animation: blurIn .9s ease forwards;
+  animation-play-state: paused;
+}
+.play .fx-word { animation-play-state: running; }
+@keyframes blurIn { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+
+/* =========================================================
+   หน้า 2 — Concern
+   ========================================================= */
+.concern-wrap { max-width: 700px; margin: 0 auto; }
+.cloud {
+  position: absolute;
+  width: 90px;
+  height: 30px;
+  background: #fff;
+  border-radius: 999px;
+  opacity: .9;
+  animation: drift 7s ease-in-out infinite alternate;
+}
+.cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50%; }
+.cloud::before { width: 40px; height: 40px; top: -20px; left: 14px; }
+.cloud::after  { width: 50px; height: 50px; top: -26px; right: 12px; }
+.c1 { top: 10px; left: 2%; }
+.c2 { top: 60px; right: 4%; scale: .7; animation-delay: 1.5s; }
+@keyframes drift { to { transform: translateX(24px); } }
+
+/* เอฟเฟกต์ B */
+.fx-wordwrap { display: inline-block; white-space: nowrap; }
+.fx-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(-.8em) scale(.3) rotate(-15deg);
+  animation: letterPop .6s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation-play-state: paused;
+}
+.play .fx-letter { animation-play-state: running; }
+@keyframes letterPop { 60% { opacity: 1; } to { opacity: 1; transform: none; } }
+
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--pink-soft);
+  color: var(--accent);
+  font-size: .85rem;
+  opacity: 0;
+  transform: scale(.6);
+}
+.play .chip { animation: popIn .5s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay: inherit; }
+
+.soft-frame {
+  position: relative;
+  width: min(460px, 88vw);
+  background: #fff;
+  padding: 14px;
+  border-radius: 26px;
+  box-shadow: var(--shadow);
+  transform: rotate(-1.5deg);
+}
+.soft-frame .photo { aspect-ratio: 4 / 3; border-radius: 18px; }
+.soft-frame figcaption { font-family: var(--hand); text-align: center; padding-top: 10px; color: var(--ink-soft); }
+.corner { position: absolute; font-size: 1.8rem; color: var(--pink); z-index: 2; }
+.corner.tl { top: -16px; left: -10px; }
+.corner.br { bottom: -14px; right: -8px; color: #b79bf0; }
+
+/* =========================================================
+   หน้า 3 — Flower
+   ========================================================= */
+.flower-frame { position: relative; width: min(300px, 74vw); margin: 0 auto 48px; }
+.flower-frame .photo {
+  aspect-ratio: 4 / 5;
+  border-radius: 999px 999px 28px 28px;
+  border: 8px solid #fff;
+  box-shadow: var(--shadow);
+}
+.flower-frame figcaption { font-family: var(--hand); text-align: center; color: #fff; margin-top: 12px; font-size: 1.1rem; text-shadow: 0 1px 6px rgba(150,100,200,.4); }
+.petal {
+  position: absolute;
+  z-index: 2;
+  color: #ffa6cf;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  text-shadow: 0 2px 8px rgba(255,255,255,.9);
+  animation: spinSlow 8s linear infinite;
+}
+.p1 { top: 4%;   left: -8%; }
+.p2 { top: 18%;  right: -9%; color: #c3a6f5; }
+.p3 { top: 55%;  left: -10%; color: #c3a6f5; }
+.p4 { bottom: 14%; right: -8%; }
+.p5 { top: -4%;  right: 20%; font-size: 1.3rem; }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+.paper.lined {
+  --lh: 2.1em;
+  font-family: var(--hand);
+  font-size: clamp(1rem, 2.8vw, 1.18rem);
+  line-height: var(--lh);
+  padding-top: var(--lh);
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(to bottom,
+    transparent 0 calc(var(--lh) - 1px),
+    rgba(196,168,232,.35) calc(var(--lh) - 1px) var(--lh));
+}
+.paper.lined .write { margin-bottom: 0; }
+
+/* เอฟเฟกต์ C (ลายมือ) */
+.hw { position: relative; }
+.hw-ghost { visibility: hidden; }
+.hw-out { position: absolute; inset: 0; }
+.ink { animation: inkIn .35s ease both; }
+@keyframes inkIn { from { opacity: 0; } }
+.pen {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent);
+  animation: penMove .3s ease-in-out infinite alternate;
+}
+@keyframes penMove { to { transform: translate(2px, -3px) rotate(-10deg); } }
+.skip-hint {
+  margin-top: 10px;
+  font-family: 'Prompt', sans-serif;
+  font-size: .78rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--ink-soft);
+  transition: opacity .4s;
+}
+.skip-hint.hide { opacity: 0; }
+
+/* ซอง + ซีดี */
+.envelope-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 104px; /* เผื่อที่ให้ซีดีสไลด์ขึ้นมา */
+}
+.envelope {
+  position: relative;
+  width: 180px;
+  height: 120px;
+  cursor: pointer;
+  perspective: 600px;
+  outline: none;
+}
+.envelope-area.ready .envelope:not(.open) { animation: wiggle 1.6s ease-in-out infinite; }
+@keyframes wiggle {
+  0%, 60%, 100% { transform: rotate(0); }
+  70% { transform: rotate(-4deg); }
+  80% { transform: rotate(4deg); }
+  90% { transform: rotate(-2deg); }
+}
+.env-back  { position: absolute; inset: 0; background: #f5bedb; border-radius: 10px; }
+.env-front {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #ffd3e8;
+  border-radius: 10px;
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: inset 0 -6px 12px rgba(230,150,200,.25);
+}
+.env-flap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 62%;
+  z-index: 4;
+  background: #f0add0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform .55s ease, z-index 0s .28s;
+}
+.env-seal {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 1.3rem;
+  text-shadow: 0 1px 4px rgba(220,110,170,.6);
+  transition: opacity .3s;
+}
+.envelope.open .env-flap { transform: rotateX(180deg); z-index: 1; }
+.envelope.open .env-seal { opacity: 0; }
+
+.cd {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 108px;
+  height: 108px;
+  margin-left: -54px;
+  z-index: 2;
+  cursor: pointer;
+  outline: none;
+  transition: transform .9s cubic-bezier(.22,1,.36,1) .3s;
+}
+.envelope.open .cd { transform: translateY(-96px); }
+.cd-disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 15%, rgba(255,255,255,.85) 15.5% 19%, transparent 19.5%),
+    conic-gradient(#ffd1ec, #d9c8ff, #c8f1ff, #fff3c8, #ffd1ec, #e5c9ff, #ffd1ec);
+  -webkit-mask: radial-gradient(circle, transparent 0 8%, #000 8.5%);
+          mask: radial-gradient(circle, transparent 0 8%, #000 8.5%);
+  box-shadow: 0 6px 18px rgba(150,100,190,.35);
+}
+.cd.spin .cd-disc { animation: spinSlow 2.6s linear infinite; }
+.cd.stopped .cd-disc { animation-play-state: paused; }
+.envelope-area.playing .cd-disc { filter: drop-shadow(0 0 12px rgba(255,160,210,.9)); }
+
+.music-status {
+  margin-top: 16px;
+  min-height: 1.5em;
+  font-family: 'Prompt', sans-serif;
+  font-size: .9rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.eq { display: inline-flex; align-items: flex-end; gap: 3px; height: 14px; visibility: hidden; }
+.envelope-area.playing .eq { visibility: visible; }
+.eq i { width: 3px; height: 4px; background: var(--pink); border-radius: 2px; animation: eq .8s ease-in-out infinite alternate; }
+.eq i:nth-child(2) { animation-delay: .2s; }
+.eq i:nth-child(3) { animation-delay: .4s; }
+@keyframes eq { to { height: 14px; } }
+
+/* ---------- คนที่ตั้งค่าลดแอนิเมชันในเครื่อง ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+a.menu-box { text-decoration: none; }
+
+/* ===== แถบโฟโต้บูทแปะบนกระดาษ ===== */
+.impression-layout { display: block; max-width: 820px; margin: 0 auto; }
+.paper .strip-area {
+  float: right;
+  width: min(220px, 40%);
+  margin: -6px -4px 16px 26px;
+  padding: 8px 0;
+}
+.paper .photostrip { width: 100%; }
+.paper::after { content: ""; display: block; clear: both; }
+
+@media (max-width: 600px) {
+  .paper .strip-area { float: none; width: min(210px, 72%); margin: 4px auto 24px; }
+}

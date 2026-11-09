@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Flower</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ===== ซอง + ซีดี ===== */
+    .envelope-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 150px; /* เผื่อที่ให้ซีดีสไลด์ขึ้นมา */
+    }
+    .pocket {
+      position: relative;
+      width: 180px;
+      height: 120px;
+      cursor: pointer;
+      outline: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .pocket.wiggle:not(.open) { animation: pocketWiggle 1.6s ease-in-out infinite; }
+    @keyframes pocketWiggle {
+      0%, 60%, 100% { transform: rotate(0); }
+      70% { transform: rotate(-4deg); }
+      80% { transform: rotate(4deg); }
+      90% { transform: rotate(-2deg); }
+    }
+    .pocket-back {
+      position: absolute; inset: 0; z-index: 1;
+      background: #f3b5d6;
+      border-radius: 10px;
+    }
+    .pocket-front {
+      position: absolute; inset: 0; z-index: 3;
+      background: #ffd3e8;
+      border-radius: 10px;
+      clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+      box-shadow: inset 0 -6px 12px rgba(230,150,200,.25);
+    }
+    .pocket-flap {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 62%;
+      z-index: 4;
+      background: #f0add0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform .55s ease, opacity .3s ease .3s;
+    }
+    .pocket-seal {
+      position: absolute; top: 46%; left: 50%; z-index: 5;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 1.3rem;
+      text-shadow: 0 1px 4px rgba(220,110,170,.7);
+      transition: opacity .3s;
+    }
+    .pocket.open .pocket-flap { transform: scaleY(-1); opacity: .9; }
+    .pocket.open .pocket-seal { opacity: 0; }
+
+    /* ตัวซีดี — โผล่ออกมาจากปากซองตั้งแต่แรก */
+    .disc {
+      position: absolute;
+      z-index: 2;
+      top: -42px;
+      left: 50%;
+      width: 110px;
+      height: 110px;
+      margin-left: -55px;
+      transition: transform .9s cubic-bezier(.22,1,.36,1) .2s;
+    }
+    .pocket.open .disc { transform: translateY(-95px); z-index: 6; }
+    .disc-face {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      background:
+        radial-gradient(circle, #fffafd 0 9%, #b99ae6 9% 11%, rgba(255,255,255,.95) 11% 22%, transparent 22%),
+        linear-gradient(115deg, transparent 40%, rgba(255,255,255,.8) 50%, transparent 60%),
+        conic-gradient(from 30deg, #f7b8dc, #c3a8ff, #a9dcff, #ffe9a8, #f7b8dc, #d2b5ff, #f7b8dc);
+      box-shadow: 0 8px 20px rgba(140,90,190,.45), inset 0 0 0 1px rgba(150,110,200,.4);
+    }
+    .disc.spin .disc-face { animation: discSpin 2.6s linear infinite; }
+    .disc.stopped .disc-face { animation-play-state: paused; }
+    .envelope-area.playing .disc-face {
+      box-shadow: 0 0 22px rgba(255,150,210,.95), 0 8px 20px rgba(140,90,190,.45);
+    }
+    @keyframes discSpin { to { transform: rotate(360deg); } }
+    /* ให้ซีดีหมุนได้แม้เครื่องตั้งค่าลดภาพเคลื่อนไหวไว้ */
+    @media (prefers-reduced-motion: reduce) {
+      .disc.spin .disc-face {
+        animation-duration: 2.6s !important;
+        animation-iteration-count: infinite !important;
+      }
+    }
+
+    .music-status {
+      margin-top: 16px;
+      min-height: 1.5em;
+      font-family: 'Prompt', sans-serif;
+      font-size: .9rem;
+      line-height: 1.5;
+      text-align: center;
+      color: #7a59a8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .eq { display: inline-flex; align-items: flex-end; gap: 3px; height: 14px; visibility: hidden; }
+    .envelope-area.playing .eq { visibility: visible; }
+    .eq i {
+      width: 3px; height: 4px;
+      background: #ff9fcf;
+      border-radius: 2px;
+      animation: eqBar .8s ease-in-out infinite alternate;
+    }
+    .eq i:nth-child(2) { animation-delay: .2s; }
+    .eq i:nth-child(3) { animation-delay: .4s; }
+    @keyframes eqBar { to { height: 14px; } }
+
+    /* ลายมือ */
+    .write { position: relative; }
+    .write .ghost { visibility: hidden; }
+    .write .out { position: absolute; inset: 0; }
+    .pen { display: inline-block; margin-left: 2px; color: #d974b0; }
+    .skip-hint.hide { opacity: 0; }
+  </style>
+</head>
+<body class="sub-page">
+  <a href="index.html" class="back-btn">← back</a>
+
+  <main class="page">
+    <header class="page-head">
+      <img src="flower.png" alt="" class="page-icon">
+      <h1 class="page-title">My Flower</h1>
+      <p class="page-sub">ดอกไม้ของเรา ✿</p>
+    </header>
+
+    <!-- รูปคู่ -->
+    <figure class="flower-frame">
+      <span class="petal p1">✿</span>
+      <span class="petal p2">❀</span>
+      <span class="petal p3">✿</span>
+      <span class="petal p4">❀</span>
+      <span class="petal p5">✿</span>
+      <div class="photo">
+        <img src="" alt="รูปคู่">  <!-- 📷 ใส่ชื่อไฟล์รูปคู่ใน src="" -->
+      </div>
+      <figcaption>my flower, my favorite ✿</figcaption>
+    </figure>
+
+    <!-- กระดาษจดหมาย -->
+    <article class="paper lined" id="letter">
+      <span class="tape"></span>
+      <!-- ✏️ ใส่ข้อความตรงนี้ (1 ย่อหน้า = 1 แท็ก <p class="write">) -->
+      <p class="write">ถึง ดอกไม้ของเรา,</p>
+      <p class="write">พิมพ์ข้อความย่อหน้าที่ 1 ตรงนี้</p>
+      <p class="write">พิมพ์ข้อความย่อหน้าที่ 2 ตรงนี้</p>
+      <p class="write sign">รักนะ — เรา ♡</p>
+      <p class="skip-hint" id="skipHint">แตะที่กระดาษเพื่อข้ามได้นะ</p>
+
+      <!-- ซองเล็กๆ ท้ายกระดาษ -->
+      <div class="envelope-area" id="envArea">
+        <div class="pocket" id="pocket" role="button" tabindex="0" aria-label="เปิดซองและเปลี่ยนเพลง">
+          <div class="pocket-back"></div>
+          <div class="disc" id="disc"><div class="disc-face"></div></div>
+          <div class="pocket-front"></div>
+          <div class="pocket-flap"></div>
+          <span class="pocket-seal">♡</span>
+        </div>
+        <p class="music-status">
+          <span class="eq"><i></i><i></i><i></i></span>
+          <span id="musicStatus">แตะที่ซองเล็กๆ นี้สิ ♡</span>
+        </p>
+      </div>
+    </article>
+
+    <nav class="page-nav">
+      <a href="concern.html">← My Concern</a>
+      <a href="index.html">กลับหน้าแรก ♡</a>
+    </nav>
+    <footer class="page-foot">made with love ♡</footer>
+  </main>
+
+  <script>
+  (function () {
+    /* 🎵 ใส่ชื่อไฟล์เพลง + ชื่อเพลงตรงนี้ (ต้องเป็นไฟล์ .mp3 ในโฟลเดอร์เดียวกัน) */
+    const SONGS = [
+      { src: 'song1.mp3', title: 'เพลงที่ 1' },
+      { src: 'song2.mp3', title: 'เพลงที่ 2' },
+      { src: 'song3.mp3', title: 'เพลงที่ 3' }
+    ];
+    const SPEED = 45; // ความเร็วเขียน ยิ่งมากยิ่งช้า
+
+    const letter   = document.getElementById('letter');
+    const skipHint = document.getElementById('skipHint');
+    const envArea  = document.getElementById('envArea');
+    const pocket   = document.getElementById('pocket');
+    const disc     = document.getElementById('disc');
+    const statusEl = document.getElementById('musicStatus');
+
+    /* ---------- ช่องรูปว่าง ไม่ให้ขึ้นไอคอนรูปเสีย ---------- */
+    document.querySelectorAll('.photo img').forEach(img => {
+      const box = img.closest('.photo');
+      if (!img.getAttribute('src')) box.classList.add('empty');
+      img.addEventListener('error', () => box.classList.add('empty'));
+    });
+
+    /* ---------- 1) ข้อความค่อยๆ ถูกเขียน ---------- */
+    const seg = (window.Intl && Intl.Segmenter) ? new Intl.Segmenter('th', { granularity: 'grapheme' }) : null;
+    const toChars = t => seg ? Array.from(seg.segment(t), s => s.segment) : Array.from(t);
+
+    const lines = Array.from(letter.querySelectorAll('.write')).map(el => {
+      const text = el.textContent.replace(/\s+/g, ' ').trim();
+      el.textContent = '';
+      const ghost = document.createElement('span'); ghost.className = 'ghost'; ghost.textContent = text;
+      const out   = document.createElement('span'); out.className = 'out';
+      el.append(ghost, out);
+      return { out, text, chars: toChars(text) };
+    });
+
+    const pen = document.createElement('span');
+    pen.className = 'pen';
+    pen.textContent = '✎';
+    let li = 0, ci = 0, timer = null, started = false, done = false;
+
+    function finishWriting() {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      lines.forEach(l => { l.out.textContent = l.text; });
+      pen.remove();
+      skipHint.classList.add('hide');
+      pocket.classList.add('wiggle'); // ซองดุ๊กดิ๊กชวนให้กด
+    }
+    function tick() {
+      if (li >= lines.length) return finishWriting();
+      const l = lines[li];
+      ci++;
+      l.out.textContent = l.chars.slice(0, ci).join('');
+      l.out.appendChild(pen);
+      let wait = SPEED;
+      if (/[.!?…,]/.test(l.chars[ci - 1] || '')) wait = SPEED * 7;
+      if (ci >= l.chars.length) { li++; ci = 0; wait = SPEED * 12; }
+      timer = setTimeout(tick, wait);
+    }
+    function startWriting() {
+      if (started) return;
+      started = true;
+      tick();
+    }
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(e => e.isIntersecting)) { io.disconnect(); startWriting(); }
+      });
+      io.observe(letter);
+    } else {
+      startWriting();
+    }
+
+    letter.addEventListener('click', e => {
+      if (!e.target.closest('.envelope-area')) finishWriting();
+    });
+
+    /* ---------- 2) ซอง → ซีดี → เพลง 1, 2, 3, ปิด ---------- */
+    const audio = new Audio();
+    audio.loop = true;
+    let opened = false;
+    let step = 0; // 0 = ปิด, 1–3 = เพลงที่ 1–3
+
+    function openPocket() {
+      opened = true;
+      finishWriting();
+      pocket.classList.add('open');
+      setTimeout(() => {
+        disc.classList.add('spin');
+        statusEl.textContent = 'แตะที่ซีดีเพื่อเปิดเพลงนะ ♪';
+      }, 700);
+    }
+
+    function nextTrack() {
+      step = (step + 1) % 4;
+
+      if (step === 0) { // ครั้งที่ 4 = ปิดเพลง
+        audio.pause();
+        audio.currentTime = 0;
+        disc.classList.add('stopped');
+        envArea.classList.remove('playing');
+        statusEl.textContent = 'ปิดเพลงแล้ว — แตะอีกครั้งเพื่อเริ่มใหม่ ♡';
+        return;
+      }
+
+      const n = step;
+      const song = SONGS[n - 1];
+      disc.classList.remove('stopped');
+      statusEl.textContent = 'กำลังเปิดเพลง…';
+      audio.src = song.src;
+
+      const p = audio.play();
+      if (p && p.then) {
+        p.then(() => {
+          if (step !== n) return;
+          envArea.classList.add('playing');
+          statusEl.textContent = `♪ ${song.title} (${n}/3)`;
+        }).catch(err => {
+          if (err.name === 'AbortError' || step !== n) return;
+          envArea.classList.remove('playing');
+          statusEl.textContent = `เปิด ${song.src} ไม่ได้ ลองเช็กชื่อไฟล์นะ`;
+        });
+      } else {
+        envArea.classList.add('playing');
+        statusEl.textContent = `♪ ${song.title} (${n}/3)`;
+      }
+    }
+
+    pocket.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!opened) return openPocket();
+      nextTrack();
+    });
+    pocket.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pocket.click(); }
+    });
+  })();
+  </script>
+</body>
+</html>

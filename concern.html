@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Concern</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="sub-page">
+  <a href="index.html" class="back-btn" data-transition>← back</a>
+
+  <main class="page">
+    <header class="page-head">
+      <span class="cloud c1"></span>
+      <span class="cloud c2"></span>
+      <img src="sad.png" alt="" class="page-icon">
+      <h1 class="page-title">My Concern</h1>
+      <p class="page-sub">เรื่องที่เราไม่สบายใจ</p>
+    </header>
+
+    <div class="concern-wrap">
+      <article class="paper" id="concernText">
+        <span class="tape"></span>
+        <h2 class="paper-title fx">ไม่สบายใจเลย…</h2>
+        <!-- ✏️ ใส่ข้อความตรงนี้ (1 ย่อหน้า = 1 แท็ก <p class="fx">) -->
+        <p class="fx">เธอมักบอกว่าถ้าเค้ามีอะไรให้บอกเธอ เค้ามักจะกลัวเธอทิ้งอยู่เสมอเลยนะ คิดตลอดเลยว่าเราน่าเบื่อจังเธอจะทิ้งรึเปล่านะ เธอตอบห้วนจังจะเบื่อแล้วหรอ</p>
+        <p class="fx">วันนี้ไม่ค่อยได้คุยเลยดูแลเธอไม่ดีเลย เธอจะไม่รักแล้วรึเปล่า ไม่ค่อยได้หยอกเธอเลยเธอจะคิดไงบ้างนะ คิดถึงเธอจังไม่รู้จะชวนคุยไรดีเธอคงเบื่อคุยแค่ คิดถึง อยากเจอ อยากกอด หลับไม่ฝัน มอนิ่งแล้วล่ะมั้ง </p>
+        <p class="fx">เค้าเป็นคนคิดมากเสมอคับเรื่องที่เค้าคิดก็ประมาณนี้ ห่วงสุขภาพเธอก็ส่วนนึงการใช้ชีวิตก็ส่วนนึง เค้ารู้คับเธอเป็นคนเก่ง อะไรๆก็ทำเองได้เธอเก่งมาเสมอนะคับรู้มั้ยแต่ว่าเรื่องบางเรื่องให้เค้าได้ทำให้ได้มั้ย เค้าอยู่ตรงนี้แล้วอยากช่วยให้ชีวิตเธอง่ายขึ้นนะคับเป็นสิ่งตอบแทนที่ให้เธอดูแลไง</p>
+
+        <!-- ✏️ ป้ายเตือนเล็กๆ แก้ข้อความได้ -->
+        <div class="chips">
+          <span class="chip">กินข้าวให้ตรงเวลานะ</span>
+          <span class="chip">อย่านอนดึกเกินไป</span>
+          <span class="chip">ดื่มน้ำเยอะๆ</span>
+          <span class="chip">เหนื่อยก็พักได้นะ</span>
+        </div>
+      </article>
+
+      <!-- รูปคู่ -->
+      <section class="couple">
+        <figure class="soft-frame">
+          <span class="corner tl">♡</span>
+          <span class="corner br">✿</span>
+          <div class="photo" data-label="ใส่รูปคู่ตรงนี้">
+            <img src="pic5.jpg" alt="รูปคู่">
+          </div>
+          <figcaption>always here for u</figcaption>
+        </figure>
+      </section>
+    </div>
+
+    <nav class="page-nav">
+      <a href="impression.html" data-transition>← My Impression</a>
+      <a href="flower.html" data-transition>My Flower →</a>
+    </nav>
+    <footer class="page-foot">made with love ♡</footer>
+  </main>
+
+  <script src="common.js"></script>
+  <script>
+    const box = document.getElementById('concernText');
+    let t = 0;
+    box.querySelectorAll('.fx').forEach(el => { t = FX.popLetters(el, 24, t) + 200; });
+    box.querySelectorAll('.chip').forEach((c, i) => { c.style.animationDelay = (t + i * 150) + 'ms'; });
+    FX.onView(box, () => box.classList.add('play'));
+  </script>
+</body>
+</html>

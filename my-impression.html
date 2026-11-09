@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Impression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="sub-page">
+  <a href="index.html" class="back-btn" data-transition>← back</a>
+
+  <main class="page">
+    <header class="page-head">
+      <img src="impession.png" alt="" class="page-icon">
+      <h1 class="page-title">My Impression</h1>
+      <p class="page-sub">ความประทับใจของเรา ♡</p>
+    </header>
+
+    <section class="impression-layout">
+      <!-- กระดาษข้อความ -->
+      <article class="paper" id="impressionText">
+        <span class="tape tape-left"></span>
+        <span class="tape tape-right"></span>
+        <h2 class="paper-title fx">ถึงเธอ…</h2>
+        <!-- ✏️ ใส่ข้อความตรงนี้ (1 ย่อหน้า = 1 แท็ก <p class="fx">) -->
+        <p class="fx">พิมพ์ข้อความย่อหน้าที่ 1 ตรงนี้</p>
+        <p class="fx">พิมพ์ข้อความย่อหน้าที่ 2 ตรงนี้</p>
+        <p class="fx">พิมพ์ข้อความย่อหน้าที่ 3 ตรงนี้</p>
+        <p class="fx sign">— จากเรา ♡</p>
+      </article>
+
+      <!-- แถบรูปโฟโต้บูท -->
+      <aside class="strip-area">
+        <span class="sticker s1">♡</span>
+        <span class="sticker s2">✦</span>
+        <span class="sticker s3">✿</span>
+        <span class="sticker s4">✧</span>
+
+        <div class="photostrip">
+          <span class="tape"></span>
+          <!-- 📷 ใส่ลิงก์รูปใน src="" -->
+          <div class="photo" data-label="photo 1"><img src="" alt="photo 1"></div>
+          <div class="photo" data-label="photo 2"><img src="" alt="photo 2"></div>
+          <div class="photo" data-label="photo 3"><img src="" alt="photo 3"></div>
+          <div class="photo" data-label="photo 4"><img src="" alt="photo 4"></div>
+          <p class="strip-foot">09 . 10 . 2026 ♡</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- รูปคู่ -->
+    <section class="couple">
+      <figure class="polaroid">
+        <span class="tape"></span>
+        <div class="photo" data-label="ใส่รูปคู่ตรงนี้">
+          <img src="" alt="รูปคู่">  <!-- 📷 ใส่ลิงก์รูปคู่ -->
+        </div>
+        <figcaption>us ♡</figcaption>
+      </figure>
+    </section>
+
+    <nav class="page-nav">
+      <a href="index.html" data-transition>← หน้าแรก</a>
+      <a href="concern.html" data-transition>My Concern →</a>
+    </nav>
+    <footer class="page-foot">made with love ♡</footer>
+  </main>
+
+  <script src="common.js"></script>
+  <script>
+    const box = document.getElementById('impressionText');
+    let t = 0;
+    box.querySelectorAll('.fx').forEach(el => { t = FX.blurWords(el, 55, t) + 150; });
+    FX.onView(box, () => box.classList.add('play'));
+  </script>
+</body>
+</html>
